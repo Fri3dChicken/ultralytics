@@ -16,9 +16,6 @@ jobs:
     steps:
       - name: Checkout repository
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: 3.8
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -28,7 +25,6 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           
       - name: Install requirements
-        shell: bash  # for Windows compatibility
         run: |
           python3 -m pip install --upgrade pip wheel
          
