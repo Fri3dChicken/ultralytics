@@ -22,13 +22,15 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
+          
+      - name: Download requirements
+        run: |
+          pip install -e .
+          
 
       - name: Export and push model to S3
-        
         env:
           AWS_BUCKET_NAME: s3://sightdata-tm/Model_Weights/yolov8_seg/
         run: |
-          # Replace with your Docker build and push commands
-          pip install -e .
           yolo export model=yolov8x-seg.pt format=onnx device=0
           aws s3 cp yolov8x-seg.onnx AWS_BUCKET_NAME
