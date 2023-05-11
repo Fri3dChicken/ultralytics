@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  AWS_REGION: ap-southeast-2\
+  AWS_REGION: ap-southeast-2
   AWS_BUCKET_NAME: s3://sightdata-tm/Model_Weights/yolov8_seg/
 
 jobs:
