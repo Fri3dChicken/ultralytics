@@ -15,7 +15,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -28,12 +31,7 @@ jobs:
         shell: bash  # for Windows compatibility
         run: |
           python3 -m pip install --upgrade pip wheel
-          if [ "${{ matrix.torch }}" == "1.8.0" ]; then
-              pip install -e . torch==1.8.0 torchvision==0.9.0 pytest --extra-index-url https://download.pytorch.org/whl/cpu
-          else
-              pip install -e . pytest --extra-index-url https://download.pytorch.org/whl/cpu
-          fi
-          
+         
       - name: Export model
         shell: bash
         run: |
