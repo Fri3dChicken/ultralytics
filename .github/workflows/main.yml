@@ -29,7 +29,7 @@ jobs:
           pip install -e .
           
       - name: Export model
-        shell: python
+        shell: python3
         run: |
           from ultralytics import YOLO
 
