@@ -6,7 +6,8 @@ on:
       - main
 
 env:
-  AWS_REGION: ap-southeast-2
+  AWS_REGION: ap-southeast-2\
+  AWS_BUCKET_NAME: s3://sightdata-tm/Model_Weights/yolov8_seg/
 
 jobs:
   upload-image:
@@ -27,10 +28,18 @@ jobs:
         run: |
           pip install -e .
           
-
-      - name: Export and push model to S3
-        env:
-          AWS_BUCKET_NAME: s3://sightdata-tm/Model_Weights/yolov8_seg/
+      - name: Export model
+        shell: python
         run: |
-          yolo export model=yolov8x-seg.pt format=onnx device=0
-          aws s3 cp yolov8x-seg.onnx AWS_BUCKET_NAME
+          from ultralytics import YOLO
+
+          # Load a model
+          model = YOLO('yolov8x-seg.pt')  # load an official model
+          
+          # Export the model
+          model.export(format='onnx')
+          
+      - name: Download requirements
+        shell: bash
+        run: |      
+          aws s3 cp yolov8x-seg.onnx $AWS_BUCKET_NAME
