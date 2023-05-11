@@ -16,6 +16,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -29,11 +33,17 @@ jobs:
           pip install ultralytics
          
       - name: Export model
-        shell: bash
+        shell: python
         run: |
-          yolo export model=yolov8x-seg.pt format=onnx device=0
+          from ultralytics import YOLO
+
+          # Load a model
+          model = YOLO('yolov8n-seg.pt')  # load an official model
+
+          # Export the model
+          model.export(format='onnx')
           
       - name: Upload to S3
         shell: bash
         run: |      
-          aws s3 cp yolov8x-seg.onnx $AWS_BUCKET_NAME
+          aws s3 cp yolov8n-seg.onnx $AWS_BUCKET_NAME
